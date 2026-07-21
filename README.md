@@ -43,7 +43,10 @@ Acesse http://localhost:5173
 ## Como funciona
 
 - Os dados (salários, economias e dívidas) ficam salvos no `localStorage` do navegador — não há backend.
-- O Painel calcula automaticamente: renda total, total economizado, dívidas restantes e saldo livre (renda − dívidas − economias).
+- **Renda recorrente automática**: ao cadastrar um salário, você informa o dia em que ele cai (ex: dia 5 e dia 20, como dois lançamentos separados). O sistema calcula sozinho, com base na data de hoje, o que já entrou e o que ainda vai entrar — sem precisar editar nada todo mês.
+- O Painel tem um seletor de mês (‹ ›) que mostra a renda prevista, já recebida e a receber de qualquer mês — passado, atual ou futuro — sempre a partir da mesma renda cadastrada uma única vez.
+- **Dívidas parceladas automáticas**: ao cadastrar uma dívida, você informa o valor da parcela, quantas parcelas ao todo, o dia de vencimento e em que mês começa a primeira parcela. O app calcula sozinho em qual parcela você está em cada mês, sem precisar marcar pagamento manualmente.
+- Também calcula: total economizado, dívidas restantes (parcelas ainda não vencidas) e saldo livre (renda do mês − dívidas − economias).
 - Cada página (Salário, Economias, Dívidas) tem seu próprio formulário de cadastro em modal.
 - As metas de economia e as dívidas mostram barras de progresso.
 
@@ -53,9 +56,3 @@ Acesse http://localhost:5173
 - React Router
 - Tailwind CSS (tokens de cor/tipografia personalizados)
 - Recharts (gráficos)
-
-## Próximos passos sugeridos
-
-- Autenticação e sincronização em nuvem (ex: Supabase/Firebase)
-- Histórico mensal e comparação entre meses
-- Exportação de relatórios em PDF

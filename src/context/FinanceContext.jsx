@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
+import { computeDividaResumoGlobal } from '../utils/dividas.js'
 
 const FinanceContext = createContext(null)
 
@@ -28,22 +29,21 @@ export function FinanceProvider({ children }) {
         prev.map((e) => (e.id === id ? { ...e, valorAtual: Math.max(0, (e.valorAtual || 0) + valor) } : e))
       ),
 
-    // Dívidas
-    addDivida: (item) => setDividas((prev) => [...prev, { id: crypto.randomUUID(), pago: 0, ...item }]),
-    removeDivida: (id) => setDividas((prev) => prev.filter((d) => d.id !== id)),
-    pagarParcela: (id, valor) =>
-      setDividas((prev) =>
-        prev.map((d) => (d.id === id ? { ...d, pago: Math.min(d.valorTotal, (d.pago || 0) + valor) } : d))
-      )
+    // Dívidas parceladas — acompanham os meses sozinhas a partir do cadastro
+    addDivida: (item) => setDividas((prev) => [...prev, { id: crypto.randomUUID(), ...item }]),
+    removeDivida: (id) => setDividas((prev) => prev.filter((d) => d.id !== id))
   }), [setSalarios, setEconomias, setDividas])
 
   const totals = useMemo(() => {
     const totalRenda = salarios.reduce((sum, s) => sum + Number(s.valor || 0), 0)
     const totalEconomizado = economias.reduce((sum, e) => sum + Number(e.valorAtual || 0), 0)
     const totalMetaEconomias = economias.reduce((sum, e) => sum + Number(e.meta || 0), 0)
-    const totalDividas = dividas.reduce((sum, d) => sum + Number(d.valorTotal || 0), 0)
-    const totalPagoDividas = dividas.reduce((sum, d) => sum + Number(d.pago || 0), 0)
-    const totalDividasRestante = Math.max(0, totalDividas - totalPagoDividas)
+
+    const resumoDividas = computeDividaResumoGlobal(dividas)
+    const totalDividas = resumoDividas.totalDividas
+    const totalPagoDividas = resumoDividas.totalPago
+    const totalDividasRestante = resumoDividas.totalRestante
+
     const saldoLivre = totalRenda - totalDividasRestante - totalEconomizado
 
     return {
