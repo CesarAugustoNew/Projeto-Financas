@@ -90,6 +90,17 @@ export default function Dashboard() {
         />
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <StatCard label="Saldo em conta" value={formatMoney(totals.saldoContaAtual)} accent="gold" />
+        <StatCard label="Gastos deste mês" value={formatMoney(totals.totalGastosMes)} accent="clay" />
+        <StatCard
+          label="Saldo disponível"
+          value={formatMoney(totals.saldoDisponivel)}
+          hint="saldo em conta − gastos do mês"
+          accent={totals.saldoDisponivel < 0 ? 'clay' : 'teal'}
+        />
+      </div>
+
       {rendaMes.itens.length > 0 && (
         <Card className="mb-8">
           <h2 className="font-display text-lg text-ink-900 mb-1">Calendário de renda do mês</h2>

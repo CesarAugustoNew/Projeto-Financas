@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 const links = [
   { to: '/', label: 'Painel', icon: LedgerIcon },
   { to: '/salario', label: 'Salário', icon: CoinIcon },
+  { to: '/gastos', label: 'Gastos', icon: CartIcon },
   { to: '/economias', label: 'Economias', icon: JarIcon },
   { to: '/dividas', label: 'Dívidas', icon: WeightIcon }
 ]
@@ -64,6 +65,15 @@ function JarIcon() {
       <path d="M7 8h10l-1 12.5a1.5 1.5 0 0 1-1.5 1.4h-5A1.5 1.5 0 0 1 8 20.5L7 8Z" />
       <path d="M9 8V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V8" />
       <path d="M7.5 13h9" />
+    </svg>
+  )
+}
+function CartIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <path d="M3 4h2l1.6 9.6a2 2 0 0 0 2 1.7h7.4a2 2 0 0 0 2-1.6L19.5 8H6" />
+      <circle cx="9.5" cy="19.5" r="1.3" />
+      <circle cx="16.5" cy="19.5" r="1.3" />
     </svg>
   )
 }
