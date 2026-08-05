@@ -2,8 +2,6 @@
 
 Aplicação React para controle financeiro pessoal, com painel geral, salário/renda, economias e dívidas.
 
-## Capturas de tela
-
 <p align="center">
   <img src="docs/screenshots/painel-1.png" alt="Painel — visão geral das finanças" width="850" />
 </p>
