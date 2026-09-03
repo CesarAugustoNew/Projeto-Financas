@@ -2,10 +2,6 @@
 
 Aplicação React para controle financeiro pessoal, com painel geral, salário/renda, economias e dívidas.
 
-<p align="center">
-  <img src="docs/screenshots/painel-1.png" alt="Painel — visão geral das finanças" width="850" />
-</p>
-
 ## Estrutura de pastas
 
 ```
@@ -46,7 +42,7 @@ Acesse http://localhost:5173
 
 ## Como funciona
 
-- Os dados (salários, economias e dívidas) ficam salvos no `localStorage` do navegador — não há backend.
+- Os dados (salários, economias e dívidas) ficam salvos no `localStorage` do navegador.
 - **Renda recorrente automática**: ao cadastrar um salário, você informa o dia em que ele cai (ex: dia 5 e dia 20, como dois lançamentos separados). O sistema calcula sozinho, com base na data de hoje, o que já entrou e o que ainda vai entrar — sem precisar editar nada todo mês.
 - O Painel tem um seletor de mês (‹ ›) que mostra a renda prevista, já recebida e a receber de qualquer mês — passado, atual ou futuro — sempre a partir da mesma renda cadastrada uma única vez.
 - **Dívidas parceladas automáticas**: ao cadastrar uma dívida, você informa o valor da parcela, quantas parcelas ao todo, o dia de vencimento e em que mês começa a primeira parcela. O app calcula sozinho em qual parcela você está em cada mês, sem precisar marcar pagamento manualmente.
