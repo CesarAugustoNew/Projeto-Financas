@@ -110,7 +110,7 @@ export default function Dividas() {
                   </div>
                   <div className="text-right shrink-0">
                     {quitada ? (
-                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-[#EAF5F2] text-teal-600">
+                      <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-brand-50 text-teal-600">
                         Quitada
                       </span>
                     ) : aindaNaoComecou ? (

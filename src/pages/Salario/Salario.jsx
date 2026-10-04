@@ -6,7 +6,7 @@ import EmptyState from '../../components/common/EmptyState.jsx'
 import { formatMoney } from '../../utils/format.js'
 import { computeRendaMes, currentMonthRef } from '../../utils/renda.js'
 
-const tipos = ['Salário fixo', 'Freelance', 'Rendimento', 'Outro']
+const tipos = ['Salário fixo', 'Freelance', 'Rendimento', 'Vale alimentação / refeição', 'Outro']
 
 export default function Salario() {
   const { salarios, addSalario, removeSalario, totals } = useFinance()
@@ -35,7 +35,7 @@ export default function Salario() {
     <div>
       <header className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <p className="text-gold-600 text-xs uppercase tracking-widest mb-1">Renda</p>
+          <p className="text-brand-600 text-xs uppercase tracking-widest mb-1">Renda</p>
           <h1 className="font-display text-3xl text-ink-900">Salário e outras rendas</h1>
           <p className="text-ink-500 text-sm mt-2">
             Cadastre o dia em que cada renda cai. O painel atualiza sozinho, sem precisar editar nada.
@@ -43,7 +43,7 @@ export default function Salario() {
         </div>
         <button
           onClick={() => setOpen(true)}
-          className="bg-gold-600 hover:bg-gold-500 text-white text-sm font-medium px-4 py-2.5 rounded-card transition-colors shrink-0"
+          className="bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium px-4 py-2.5 rounded-card transition-colors shrink-0"
         >
           + Adicionar renda
         </button>
@@ -52,7 +52,7 @@ export default function Salario() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <Card>
           <p className="text-ink-500 text-xs uppercase tracking-wider">Renda total mensal</p>
-          <p className="ledger-number text-2xl text-gold-600 mt-2">{formatMoney(totals.totalRenda)}</p>
+          <p className="ledger-number text-2xl text-brand-600 mt-2">{formatMoney(totals.totalRenda)}</p>
         </Card>
         <Card>
           <p className="text-ink-500 text-xs uppercase tracking-wider">Já caiu este mês</p>
@@ -78,14 +78,14 @@ export default function Salario() {
               <div>
                 <p className="text-ink-900 text-sm font-medium">{s.nome}</p>
                 <p className="text-ink-500 text-xs mt-0.5">
-                  {s.tipo} · cai todo dia {s.diaEfetivo}
+                  {s.tipo} · cai todo dia {s.diaEfetivo}{s.restrito ? ' · só para alimentação (fora da renda livre)' : ''}
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <span
                   className={`text-xs font-medium px-2.5 py-1 rounded-full ${
                     s.recebido
-                      ? 'bg-[#EAF5F2] text-teal-600 border border-teal-500/30'
+                      ? 'bg-brand-50 text-teal-600 border border-teal-500/30'
                       : 'bg-paper-200 text-ink-700'
                   }`}
                 >
@@ -115,7 +115,7 @@ export default function Salario() {
               value={form.nome}
               onChange={(e) => setForm({ ...form, nome: e.target.value })}
               placeholder="Ex: Salário CLT (1ª quinzena)"
-              className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-gold-500"
+              className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-brand-500"
               required
             />
           </div>
@@ -124,7 +124,7 @@ export default function Salario() {
             <select
               value={form.tipo}
               onChange={(e) => setForm({ ...form, tipo: e.target.value })}
-              className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-gold-500"
+              className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-brand-500"
             >
               {tipos.map((t) => (
                 <option key={t} value={t}>
@@ -143,7 +143,7 @@ export default function Salario() {
                 value={form.valor}
                 onChange={(e) => setForm({ ...form, valor: e.target.value })}
                 placeholder="0,00"
-                className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-gold-500"
+                className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-brand-500"
                 required
               />
             </div>
@@ -156,7 +156,7 @@ export default function Salario() {
                 value={form.diaPagamento}
                 onChange={(e) => setForm({ ...form, diaPagamento: e.target.value })}
                 placeholder="5"
-                className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-gold-500"
+                className="w-full bg-paper-100 border border-line rounded-card px-3 py-2 text-sm text-ink-900 outline-none focus:border-brand-500"
                 required
               />
             </div>
@@ -166,7 +166,7 @@ export default function Salario() {
           </p>
           <button
             type="submit"
-            className="w-full bg-gold-600 hover:bg-gold-500 text-white text-sm font-medium py-2.5 rounded-card transition-colors"
+            className="w-full bg-brand-600 hover:bg-brand-500 text-white text-sm font-medium py-2.5 rounded-card transition-colors"
           >
             Salvar renda
           </button>

@@ -12,14 +12,14 @@ html, body, #root {
 
 body {
   margin: 0;
-  background-color: #FFFFFF;
-  color: #1B211C;
+  background-color: #F1F5F2;
+  color: #14221A;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: #C89A2E;
+  background: #22A06B;
   color: #FFFFFF;
 }
 
@@ -32,7 +32,7 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #E3E0D5;
+  background: #DDE6DF;
   border-radius: 8px;
 }
 
@@ -44,7 +44,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #C89A2E;
+  outline: 2px solid #22A06B;
   outline-offset: 2px;
 }
 
@@ -53,4 +53,9 @@ body {
     animation-duration: 0.001ms !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+.font-display {
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }

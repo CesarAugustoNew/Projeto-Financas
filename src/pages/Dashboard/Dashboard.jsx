@@ -1,35 +1,56 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useFinance } from '../../context/FinanceContext.jsx'
 import Card from '../../components/common/Card.jsx'
 import StatCard from '../../components/common/StatCard.jsx'
 import ExpensesDonut from '../../components/charts/ExpensesDonut.jsx'
 import BalanceTrend from '../../components/charts/BalanceTrend.jsx'
+import TechnicalChart from '../../components/charts/TechnicalChart.jsx'
+import CategoryIcon, { CATEGORY_COLORS } from '../../components/common/CategoryIcon.jsx'
+import AvisoDuplicadas from '../../components/common/AvisoDuplicadas.jsx'
+import { acharParcelasDuplicadas } from '../../utils/gastos.js'
+import { computeResumoMes } from '../../utils/resumoMes.js'
 import { formatMoney } from '../../utils/format.js'
-import { computeRendaMes, currentMonthRef, addMonths, monthLabel } from '../../utils/renda.js'
-import { computeDividaMes } from '../../utils/dividas.js'
+import { currentMonthRef, addMonths, monthLabel } from '../../utils/renda.js'
 
 export default function Dashboard() {
-  const { salarios, totals, dividas, economias } = useFinance()
+  const { salarios, totals, dividas, economias, gastos, saldoConta, updateGasto } = useFinance()
   const [mesRef, setMesRef] = useState(() => currentMonthRef())
+  const [abertas, setAbertas] = useState({})
 
-  const rendaMes = useMemo(() => computeRendaMes(salarios, mesRef), [salarios, mesRef])
-  const dividaMes = useMemo(() => computeDividaMes(dividas, mesRef), [dividas, mesRef])
+  const resumo = useMemo(
+    () => computeResumoMes({ salarios, dividas, gastos, saldoConta }, mesRef),
+    [salarios, dividas, gastos, saldoConta, mesRef]
+  )
+  const rendaMes = resumo.renda
+  const dividaMes = resumo.divida
+  const gastosMes = resumo.gastos
+  const saldoLivre = resumo.saldoLivre
+  const duplicadas = useMemo(
+    () => acharParcelasDuplicadas(gastosMes.itens, dividaMes.itens),
+    [gastosMes, dividaMes]
+  )
 
+  // Entrada e saída são do mês selecionado; investido é o total já guardado nas metas.
   const donutData = [
-    { name: 'Economias', value: totals.totalEconomizado },
-    { name: 'Dívidas restantes', value: totals.totalDividasRestante },
-    { name: 'Saldo livre', value: Math.max(0, rendaMes.totalPrevisto - totals.totalDividasRestante - totals.totalEconomizado) }
+    { name: 'Parcelas do mês', value: dividaMes.totalParcelasMes },
+    { name: 'Gastos do mês', value: gastosMes.total },
+    { name: 'Saldo livre', value: Math.max(0, saldoLivre) }
   ]
 
   const barData = [
-    { name: 'Renda do mês', valor: rendaMes.totalPrevisto },
-    { name: 'Dívidas', valor: totals.totalDividasRestante },
-    { name: 'Economias', valor: totals.totalEconomizado }
+    { name: 'Entrada', valor: rendaMes.totalLivre },
+    { name: 'Saída', valor: gastosMes.total + dividaMes.totalParcelasMes },
+    { name: 'Investido', valor: totals.totalEconomizado }
   ]
 
-  const saldoLivre = rendaMes.totalPrevisto - totals.totalDividasRestante - totals.totalEconomizado
-
   const metasEmAndamento = economias.slice(0, 3)
+
+  const topCategorias = gastosMes.porCategoria.slice(0, 6)
+  const maiorCategoria = topCategorias[0]?.value || 0
+
+  const hora = new Date().getHours()
+  const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite'
 
   const situacaoLabel = rendaMes.isFutureMonth
     ? 'previsão para este mês'
@@ -39,66 +60,155 @@ export default function Dashboard() {
 
   return (
     <div>
-      <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
+      <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-gold-600 text-xs uppercase tracking-widest mb-1">Painel</p>
-          <h1 className="font-display text-3xl text-ink-900">Visão geral das finanças</h1>
-          <p className="text-ink-500 text-sm mt-2">
-            Um retrato claro de quanto entra, quanto está guardado e quanto ainda se deve.
-          </p>
+          <h1 className="font-display text-2xl text-ink-900">{saudacao}!</h1>
+          <p className="text-ink-500 text-sm mt-1">Veja como estão suas finanças neste mês.</p>
         </div>
 
-        <div className="flex items-center gap-2 bg-paper-100 border border-line rounded-card px-2 py-1.5">
+        <div className="flex items-center gap-2 bg-paper-50 border border-line rounded-full px-2 py-1.5 shadow-card">
           <button
             onClick={() => setMesRef((m) => addMonths(m, -1))}
             aria-label="Mês anterior"
-            className="w-7 h-7 flex items-center justify-center rounded-md text-ink-700 hover:bg-paper-200 hover:text-ink-900"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-ink-700 hover:bg-brand-50 hover:text-brand-700"
           >
             ‹
           </button>
-          <span className="ledger-number text-sm text-ink-900 min-w-[136px] text-center capitalize">
+          <span className="text-sm font-medium text-ink-900 min-w-[136px] text-center capitalize">
             {monthLabel(mesRef.year, mesRef.month)}
           </span>
           <button
             onClick={() => setMesRef((m) => addMonths(m, 1))}
             aria-label="Próximo mês"
-            className="w-7 h-7 flex items-center justify-center rounded-md text-ink-700 hover:bg-paper-200 hover:text-ink-900"
+            className="w-7 h-7 flex items-center justify-center rounded-full text-ink-700 hover:bg-brand-50 hover:text-brand-700"
           >
             ›
           </button>
         </div>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <StatCard label="Renda prevista no mês" value={formatMoney(rendaMes.totalPrevisto)} accent="gold" />
-        <StatCard
-          label="Já caiu"
-          value={formatMoney(rendaMes.totalRecebido)}
-          hint={situacaoLabel}
-          accent="teal"
-        />
-        <StatCard
-          label="Ainda vai cair"
-          value={formatMoney(rendaMes.totalAReceber)}
-          accent={rendaMes.totalAReceber > 0 ? 'paper' : 'teal'}
-        />
-        <StatCard
-          label="Saldo livre"
-          value={formatMoney(saldoLivre)}
-          hint="renda do mês − dívidas − economias"
-          accent={saldoLivre < 0 ? 'clay' : 'paper'}
-        />
-      </div>
+      <AvisoDuplicadas
+        duplicadas={duplicadas}
+        onMarcar={(id) => updateGasto(id, { ehParcela: true })}
+      />
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        <StatCard label="Saldo em conta" value={formatMoney(totals.saldoContaAtual)} accent="gold" />
-        <StatCard label="Gastos deste mês" value={formatMoney(totals.totalGastosMes)} accent="clay" />
-        <StatCard
-          label="Saldo disponível"
-          value={formatMoney(totals.saldoDisponivel)}
-          hint="saldo em conta − gastos do mês"
-          accent={totals.saldoDisponivel < 0 ? 'clay' : 'teal'}
-        />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+        <div className="lg:col-span-3 space-y-6">
+          <div className="bg-brand-700 text-white rounded-card shadow-card p-6">
+            <p className="text-white/70 text-sm">Saldo em conta</p>
+            <p className="ledger-number text-4xl mt-1">{formatMoney(totals.saldoContaAtual)}</p>
+            {resumo.projecaoFim !== null ? (
+              <p className="text-white/70 text-xs mt-2">
+                Projeção para o fim do mês:{' '}
+                <span className="ledger-number text-white">{formatMoney(resumo.projecaoFim)}</span>
+                <span className="text-white/50"> (saldo + ainda vai cair − parcelas pendentes − gastos agendados)</span>
+              </p>
+            ) : (
+              <p className="text-white/70 text-xs mt-2">
+                Resultado do mês:{' '}
+                <span className="ledger-number text-white">{formatMoney(saldoLivre)}</span>
+                <span className="text-white/50"> (renda livre − parcelas − gastos)</span>
+              </p>
+            )}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
+              <div className="bg-white/10 rounded-xl px-4 py-3">
+                <p className="text-white/70 text-xs">Renda livre prevista</p>
+                <p className="ledger-number text-lg mt-0.5 text-[#9BE8C0]">+ {formatMoney(rendaMes.totalLivre)}</p>
+              </div>
+              <div className="bg-white/10 rounded-xl px-4 py-3">
+                <p className="text-white/70 text-xs">Gastos do mês</p>
+                <p className="ledger-number text-lg mt-0.5 text-[#FFB4AA]">- {formatMoney(gastosMes.total)}</p>
+              </div>
+            </div>
+            {rendaMes.totalRestrito > 0 && (
+              <p className="text-white/60 text-xs mt-3">
+                {formatMoney(rendaMes.totalRestrito)} de vale (só alimentação) ficam fora da renda livre.
+              </p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <StatCard
+              label="Já caiu"
+              value={formatMoney(rendaMes.totalRecebido)}
+              hint={
+                rendaMes.totalRestritoRecebido > 0
+                  ? `inclui ${formatMoney(rendaMes.totalRestritoRecebido)} de vale (só alimentação)`
+                  : situacaoLabel
+              }
+              accent="teal"
+            />
+            <StatCard
+              label="Ainda vai cair"
+              value={formatMoney(rendaMes.totalAReceber)}
+              accent={rendaMes.totalAReceber > 0 ? 'paper' : 'teal'}
+            />
+            <StatCard
+              label="Saldo livre"
+              value={formatMoney(saldoLivre)}
+              hint="renda livre − parcelas − gastos do mês"
+              accent={saldoLivre < 0 ? 'clay' : 'paper'}
+            />
+          </div>
+        </div>
+
+        <div className="lg:col-span-2 space-y-6">
+          <Card>
+            <h2 className="font-display text-base text-ink-900 mb-4">Maiores gastos no mês</h2>
+            {topCategorias.length === 0 ? (
+              <p className="text-ink-500 text-sm">
+                Nenhum gasto neste mês.{' '}
+                <Link to="/gastos" className="text-brand-600 font-medium hover:underline">Registrar um gasto</Link>
+              </p>
+            ) : (
+              <ul className="space-y-4">
+                {topCategorias.map((c) => {
+                  const aberta = Boolean(abertas[c.name])
+                  const itens = gastosMes.contados.filter((g) => (g.categoria || 'Outros') === c.name)
+                  return (
+                    <li key={c.name}>
+                      <button
+                        type="button"
+                        onClick={() => setAbertas((o) => ({ ...o, [c.name]: !o[c.name] }))}
+                        aria-expanded={aberta}
+                        aria-label={`${aberta ? 'Ocultar' : 'Ver'} gastos de ${c.name}`}
+                        className="w-full flex items-center gap-3 text-left"
+                      >
+                        <CategoryIcon categoria={c.name} />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-ink-900">{c.name}</span>
+                            <span className="ledger-number text-ink-700">{formatMoney(c.value)}</span>
+                          </div>
+                          <div className="h-1.5 bg-paper-200 rounded-full overflow-hidden mt-1.5">
+                            <div className="h-full rounded-full" style={{ width: `${(c.value / maiorCategoria) * 100}%`, background: CATEGORY_COLORS[c.name] || '#22A06B' }} />
+                          </div>
+                        </div>
+                        <svg
+                          width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+                          strokeLinecap="round" strokeLinejoin="round"
+                          className={`shrink-0 text-ink-500 transition-transform ${aberta ? 'rotate-180' : ''}`}
+                        >
+                          <path d="M6 9l6 6 6-6" />
+                        </svg>
+                      </button>
+                      {aberta && (
+                        <ul className="mt-2 ml-[52px] space-y-1.5">
+                          {itens.map((g) => (
+                            <li key={g.id} className="flex items-center justify-between gap-3 text-xs text-ink-700">
+                              <span className="truncate">{g.nome}</span>
+                              <span className="ledger-number shrink-0 text-ink-500">{formatMoney(g.valor)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </Card>
+        </div>
       </div>
 
       {rendaMes.itens.length > 0 && (
@@ -115,7 +225,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-4">
                   <span
                     className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                      item.recebido ? 'bg-[#EAF5F2] text-teal-600' : 'bg-paper-200 text-ink-700'
+                      item.recebido ? 'bg-brand-50 text-teal-600' : 'bg-paper-200 text-ink-700'
                     }`}
                   >
                     {item.recebido ? 'Recebido' : 'A receber'}
@@ -148,7 +258,7 @@ export default function Dashboard() {
                 <div className="flex items-center gap-4">
                   <span
                     className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                      item.paga ? 'bg-[#EAF5F2] text-teal-600' : 'bg-paper-200 text-ink-700'
+                      item.paga ? 'bg-brand-50 text-teal-600' : 'bg-paper-200 text-ink-700'
                     }`}
                   >
                     {item.paga ? 'Paga' : 'Pendente'}
@@ -163,15 +273,21 @@ export default function Dashboard() {
         </Card>
       )}
 
+      <Card className="mb-6">
+        <h2 className="font-display text-lg text-ink-900 mb-1">Análise técnica do saldo</h2>
+        <p className="text-ink-500 text-xs mb-4">Candles do saldo, com linha de tendência baseada nos gastos previstos</p>
+        <TechnicalChart />
+      </Card>
+
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
         <Card className="lg:col-span-3">
-          <h2 className="font-display text-lg text-ink-900 mb-1">Renda x Dívidas x Economias</h2>
-          <p className="text-ink-500 text-xs mb-2">Comparativo em reais</p>
+          <h2 className="font-display text-lg text-ink-900 mb-1">Entrada x Saída x Investido</h2>
+          <p className="text-ink-500 text-xs mb-2">Entrada = renda livre e saída = gastos + parcelas, do mês selecionado; investido = total já guardado nas metas</p>
           <BalanceTrend data={barData} />
         </Card>
         <Card className="lg:col-span-2">
           <h2 className="font-display text-lg text-ink-900 mb-1">Distribuição</h2>
-          <p className="text-ink-500 text-xs mb-2">Para onde a renda está indo</p>
+          <p className="text-ink-500 text-xs mb-2">Para onde a renda livre do mês está indo</p>
           <ExpensesDonut data={donutData} />
         </Card>
       </div>

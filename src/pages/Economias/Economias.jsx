@@ -84,7 +84,7 @@ export default function Economias() {
                 </p>
                 <div className="h-2 bg-paper-200 rounded-full overflow-hidden mt-3 mb-1">
                   <div
-                    className={`h-full ${atingida ? 'bg-gold-500' : 'bg-teal-500'}`}
+                    className={`h-full ${atingida ? 'bg-brand-500' : 'bg-teal-500'}`}
                     style={{ width: `${pct}%` }}
                   />
                 </div>

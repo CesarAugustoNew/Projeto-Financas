@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage.js'
 import { computeDividaResumoGlobal } from '../utils/dividas.js'
-import { computeGastosMes } from '../utils/gastos.js'
+import { computeResumoMes } from '../utils/resumoMes.js'
 import { currentMonthRef } from '../utils/renda.js'
 
 const FinanceContext = createContext(null)
@@ -58,13 +58,8 @@ export function FinanceProvider({ children }) {
     const totalPagoDividas = resumoDividas.totalPago
     const totalDividasRestante = resumoDividas.totalRestante
 
-    const saldoLivre = totalRenda - totalDividasRestante - totalEconomizado
-
-    const gastosMes = computeGastosMes(gastos, currentMonthRef())
-    const totalGastosMes = gastosMes.total
-    const gastosPorCategoria = gastosMes.porCategoria
     const saldoContaAtual = Number(saldoConta || 0)
-    const saldoDisponivel = saldoContaAtual - totalGastosMes
+    const resumo = computeResumoMes({ salarios, dividas, gastos, saldoConta: saldoContaAtual }, currentMonthRef())
 
     return {
       totalRenda,
@@ -73,11 +68,15 @@ export function FinanceProvider({ children }) {
       totalDividas,
       totalPagoDividas,
       totalDividasRestante,
-      saldoLivre,
-      totalGastosMes,
-      gastosPorCategoria,
+      // mês atual
+      saldoLivre: resumo.saldoLivre,
+      parcelasMes: resumo.divida.totalParcelasMes,
+      totalGastosMes: resumo.gastos.total,
+      gastosPassadosMes: resumo.gastos.totalPassado,
+      gastosAgendadosMes: resumo.gastos.totalAgendado,
+      gastosPorCategoria: resumo.gastos.porCategoria,
       saldoContaAtual,
-      saldoDisponivel
+      projecaoFimMes: resumo.projecaoFim
     }
   }, [salarios, economias, dividas, gastos, saldoConta])
 

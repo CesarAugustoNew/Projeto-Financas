@@ -1,7 +1,9 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 import { formatMoney } from '../../utils/format.js'
+import { CATEGORY_COLORS } from '../common/CategoryIcon.jsx'
 
-const COLORS = ['#2F9483', '#BD554B', '#C89A2E', '#9DA398']
+const COLORS = ['#22A06B', '#BD554B', '#E08A00', '#9AA89F']
+const NAMED = { 'Parcelas do mês': '#BD554B', 'Gastos do mês': '#E08A00', 'Saldo livre': '#22A06B', ...CATEGORY_COLORS }
 
 export default function ExpensesDonut({ data }) {
   const hasValues = data.some((d) => d.value > 0)
@@ -27,17 +29,17 @@ export default function ExpensesDonut({ data }) {
             paddingAngle={3}
             stroke="none"
           >
-            {data.map((_, i) => (
-              <Cell key={i} fill={COLORS[i % COLORS.length]} />
+            {data.map((d, i) => (
+              <Cell key={i} fill={NAMED[d.name] || COLORS[i % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip
             formatter={(value) => formatMoney(value)}
             contentStyle={{
               background: '#FFFFFF',
-              border: '1px solid #E3E0D5',
+              border: '1px solid #DDE6DF',
               borderRadius: 10,
-              color: '#1B211C',
+              color: '#14221A',
               fontSize: 12
             }}
           />
