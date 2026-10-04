@@ -15,7 +15,7 @@ A aplicação reúne renda, gastos, metas de economia e dívidas, calcula automa
 ## Demonstração
 
 ### Painel
-<img width="1916" height="871" alt="painel1" src="docs/screenshots/painel1.PNG" />
+<img width="1916" height="871" alt="painel1" src="https://github.com/user-attachments/assets/9938bd38-dcac-4b79-953c-239930d4a1c1" />
 
 <img width="1920" height="684" alt="painel2" src="https://github.com/user-attachments/assets/eaa801e9-7926-4dc8-bdf9-a55beb7363e6" />
 
