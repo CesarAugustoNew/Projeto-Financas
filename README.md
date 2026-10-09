@@ -4,6 +4,8 @@ Aplicação Front-end desenvolvida em React para controle financeiro pessoal, co
 
 A aplicação reúne renda, gastos, metas de economia e dívidas, calcula automaticamente o que já entrou, o que ainda vai entrar e o que sobra no mês, e apresenta uma **análise técnica do saldo** (gráfico de candles com média móvel, bandas e linha de tendência) baseada nos gastos previstos.
 
+
+
 <p align="center">
   <img src="https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=flat-square&logo=react&logoColor=white" alt="React + Vite">
   <img src="https://img.shields.io/badge/Estilo-Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
@@ -11,6 +13,9 @@ A aplicação reúne renda, gastos, metas de economia e dívidas, calcula automa
   <img src="https://img.shields.io/badge/Gr%C3%A1ficos-Recharts%20%2B%20SVG-22A06B?style=flat-square" alt="Recharts e SVG">
   <img src="https://img.shields.io/badge/Persist%C3%AAncia-localStorage-F7DF1E?style=flat-square&logo=javascript&logoColor=black" alt="localStorage">
 </p>
+
+[**🔗 Acessar a aplicação**](https://projeto-financas-alpha.vercel.app/)    
+
 
 ## Demonstração
 
