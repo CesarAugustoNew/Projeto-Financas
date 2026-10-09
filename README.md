@@ -1,6 +1,6 @@
 # Finanças — Controle Financeiro
 
-Aplicação Front-end desenvolvida em React para controle financeiro pessoal, com o objetivo de substituir planilhas e anotações por um painel único, que mostra para onde o dinheiro está indo e como o saldo deve ficar nos próximos meses.
+Aplicação Front-end desenvolvida em React para controle financeiro pessoal, que mostra para onde o dinheiro está indo e como o saldo deve ficar nos próximos meses.
 
 A aplicação reúne renda, gastos, metas de economia e dívidas, calcula automaticamente o que já entrou, o que ainda vai entrar e o que sobra no mês, e apresenta uma **análise técnica do saldo** (gráfico de candles com média móvel, bandas e linha de tendência) baseada nos gastos previstos.
 
