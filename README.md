@@ -20,23 +20,19 @@ A aplicação reúne renda, gastos, metas de economia e dívidas, calcula automa
 ## Demonstração
 
 ### Painel
-<img width="1916" height="871" alt="painel1" src="https://github.com/user-attachments/assets/9938bd38-dcac-4b79-953c-239930d4a1c1" />
+<img width="1920" height="736" alt="1" src="https://github.com/user-attachments/assets/4fe19dd3-75c5-4a88-a70e-06c82f386c78" />
 
-<img width="1920" height="684" alt="painel2" src="https://github.com/user-attachments/assets/eaa801e9-7926-4dc8-bdf9-a55beb7363e6" />
-
-<img width="1917" height="597" alt="painel3" src="https://github.com/user-attachments/assets/f0638a76-0f5b-4a24-9b6e-14a262540879" />
-
-### Análise técnica do saldo
-<img width="1920" height="578" alt="analisetecnica" src="https://github.com/user-attachments/assets/46ec4891-c5be-424e-b417-b71515e27ca1" />
+<img width="1918" height="571" alt="2" src="https://github.com/user-attachments/assets/875da2ae-85c3-48a3-943b-3af12ad65a16" />
 
 ### Salário e outras rendas
-<img width="1917" height="953" alt="entrada" src="https://github.com/user-attachments/assets/f9130ac1-0048-46bb-9005-9e3ac6187297" />
+<img width="1919" height="956" alt="5" src="https://github.com/user-attachments/assets/6e87d1f6-9cd2-4e9b-a534-7fc5e6f0dfed" />
 
 ### Gastos
-<img width="1914" height="951" alt="gastos" src="https://github.com/user-attachments/assets/f05ae3b4-d60d-4559-a08b-77b55a201c7b" />
+<img width="1918" height="953" alt="6" src="https://github.com/user-attachments/assets/0512068f-0cf9-4a83-9a7b-ea8fe5a8b9ce" />
 
 ### Metas de economia
-<img width="1919" height="948" alt="economia" src="https://github.com/user-attachments/assets/f14dbfe8-d40a-439e-aa5d-669f9418de61" />
+<img width="1918" height="951" alt="7" src="https://github.com/user-attachments/assets/fb464799-27ca-4f57-ba7f-c36aaa53492d" />
+
 
 ---
 
